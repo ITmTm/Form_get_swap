@@ -8,6 +8,10 @@
   padding: 0;
 }
 
+body {
+  background: url("../image/starwars.jpg") no-repeat;
+}
+
 ul,
 li,
 dl {
@@ -29,4 +33,7 @@ p {
   margin: 0;
   padding: 0;
 }
+
+
+@import "blocks/header";
 
