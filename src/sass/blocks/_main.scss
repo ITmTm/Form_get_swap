@@ -2,5 +2,47 @@
   padding-top: 20px;
   &__button {
     text-align: center;
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+  }
+  button {
+    padding: 10px 15px;
+    cursor: pointer;
+    background: #46424247;
+    border: 1px solid gold;
+    color: #89bb27;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: .6s all ease;
+    box-shadow: 2px 2px 4px gray;
+    &:hover {
+      color: #d6e8b4;
+      background: rgba(129, 88, 88, 0.28);
+      transition: .6s all ease;
+      transform: scale(0.9);
+    }
+  }
+  &__placeholder {
+    color: rgba(175, 231, 85, 0.4);
+    font-weight: 500;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 20px;
+  }
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
   }
 }
