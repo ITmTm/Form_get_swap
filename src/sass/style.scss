@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
 
 * {
-  font-family: "Roboto Condensed", sans-serif;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -10,6 +9,12 @@
 
 body {
   background: url("../image/starwars.jpg") no-repeat;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
 }
 
 ul,
@@ -36,4 +41,5 @@ p {
 
 
 @import "blocks/header";
+@import "blocks/main";
 
