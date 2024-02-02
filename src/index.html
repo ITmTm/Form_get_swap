@@ -15,16 +15,25 @@
             <img src="icon/starwars-logo.png" alt="Star-wars">
         </a>
     </div>
-
-    <section class="main">
-        <div class="container">
-            <div class="main__button">
-                <button class="main__get">Получить данные</button>
-                <button class="main__clear">Очистить данные</button>
-            </div>
-
-        </div>
-    </section>
 </header>
+
+<section class="main">
+    <div class="container">
+        <div class="main__button">
+            <button class="main__get">Получить данные</button>
+            <button class="main__clear">Очистить данные</button>
+        </div>
+
+        <div id="main__table-container" class="main__table-container">
+            <div id="spinn" class="spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <table id="data-table" class="main__table"></table>
+        </div>
+
+        <div id="placeholder" class="main__placeholder">Данные не загруженны</div>
+
+    </div>
+</section>
+
+<script src="js/index.js"></script>
 </body>
 </html>
