@@ -1,14 +1,13 @@
 #spinn {
   display: none;
-  margin-top: 20px;
-  text-align: center;
 }
 
 .spinner {
-  display: inline-block;
   position: relative;
   width: 64px;
   height: 64px;
+  display: block;
+  margin: 20px auto 0 auto;
   div {
     animation: lds-spinner 1.2s linear infinite;
     transform-origin: 32px 32px;
@@ -21,7 +20,7 @@
       width: 5px;
       height: 14px;
       border-radius: 20%;
-      background: #000;
+      background: rgba(15, 232, 63, 0.87);
     }
     &:nth-child(1) {
       transform: rotate(0deg);
