@@ -31,6 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				if (results) {
 					renderTable(results);
 					setupSortListener();  // Обработчик событий для сортировки после загрузки данных
+					setupDeleteButtons(); // Обработчик событий для кнопки удаления
 				} else {
 					showPlaceholder('Данные не найдены');
 				}
@@ -63,6 +64,8 @@ window.addEventListener('DOMContentLoaded', () => {
 				const key = Object.keys(data[i])[j];
 				cell.textContent = data[i][key]
 			}
+
+			addDeleteButton(row);  // Удаление каждой строки
 		}
 
 		// Очищаем контейнер и добавляем таблицу
@@ -71,6 +74,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 
+	// Сортировка
 	function sortData(column) {
 		const table = tableContainer.querySelector('table');
 		const rows = Array.from(table.querySelectorAll('tr'));
@@ -99,6 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		currentSortColumn = column;
 	}
 
+	// Добавление слушателя для таблицы
 	function setupSortListener() {
 		const headerCells = tableContainer.querySelectorAll('th');
 		headerCells.forEach(cell => {
@@ -111,6 +116,36 @@ window.addEventListener('DOMContentLoaded', () => {
 				sortData(column);
 			});
 		});
+	}
+
+	function setupDeleteButtons() {
+		const deleteButtons = tableContainer.querySelectorAll('.delete-button');
+		deleteButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				deleteRow(0);
+			});
+		});
+	}
+
+	function addDeleteButton(row) {
+		const deleteButtonCell = row.insertCell(-1);
+		const deleteButton = document.createElement('button');
+		deleteButton.textContent = 'Удалить';
+		deleteButton.className = 'delete-button';
+		deleteButtonCell.appendChild(deleteButton);
+	}
+
+	function deleteRow(index) {
+		const table = tableContainer.querySelector('table');
+		const rowCount = table.rows.length;
+
+		if (index >= 0 && index < rowCount) {
+			table.deleteRow(index);
+		} else {
+			console.error('Последнюю строку удалить нельзя');
+			alert('Последнюю строку удалить нельзя');
+		}
+
 	}
 
 	function clearTable() {
