@@ -5,6 +5,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		  loader = document.querySelector('#loader'),
 		  apiUrl = 'https://swapi.dev/api/people/';
 
+	let sortDirection = 1;
+	let currentSortColumn = null;
 
 	/**
 	 * @param {Object} data
@@ -21,10 +23,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		fetch(apiUrl)
 			.then(response => response.json())
 			.then(/** @param {Object} data */ data => {
+
+				// Скрытие преолоадера после загрузки данных
+				hideLoader();
+
 				const results = data && data.results;  // Явно указываем структуру объекта
 				if (results) {
-					renderTable(results)
-					hideLoader();
+					renderTable(results);
+					setupSortListener();  // Обработчик событий для сортировки после загрузки данных
 				} else {
 					showPlaceholder('Данные не найдены');
 				}
@@ -62,6 +68,49 @@ window.addEventListener('DOMContentLoaded', () => {
 		// Очищаем контейнер и добавляем таблицу
 		tableContainer.innerHTML = '';
 		tableContainer.appendChild(table);
+	}
+
+
+	function sortData(column) {
+		const table = tableContainer.querySelector('table');
+		const rows = Array.from(table.querySelectorAll('tr'));
+		const columnIndex = Array.from(rows[0].querySelectorAll('th')).findIndex(cell => cell.textContent === column);
+
+		rows.shift();
+
+		rows.sort((a, b) => {
+			const aValue = Array.from(a.querySelectorAll('td, th'))[columnIndex].textContent;
+			const bValue = Array.from(b.querySelectorAll('td, th'))[columnIndex].textContent;
+
+			if (isNaN(aValue) && isNaN(bValue)) {
+				return sortDirection * aValue.localeCompare(bValue);
+			} else {
+				return sortDirection * (Number(aValue) - Number(bValue))
+			}
+		});
+
+		while (table.rows.length > 1) {
+			table.deleteRow(1);
+		}
+
+		rows.forEach(row => table.appendChild(row));
+
+		sortDirection *= -1;
+		currentSortColumn = column;
+	}
+
+	function setupSortListener() {
+		const headerCells = tableContainer.querySelectorAll('th');
+		headerCells.forEach(cell => {
+			cell.addEventListener('click', () => {
+				const column = cell.textContent;
+
+				if (column !== currentSortColumn) {
+					sortDirection = 1;
+				}
+				sortData(column);
+			});
+		});
 	}
 
 	function clearTable() {
