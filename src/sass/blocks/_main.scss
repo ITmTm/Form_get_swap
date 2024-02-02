@@ -23,26 +23,46 @@
       transform: scale(0.9);
     }
   }
+  &__table-container {
+    margin-top: 30px;
+    max-height: 450px;
+    overflow-y: auto;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  table, th, td {
+    border: 1px solid #62f110;
+  }
+
+  th, td {
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    background-color: rgba(230, 221, 238, 0.2);
+  }
+  thead {
+    position: sticky;
+    top: 0;
+    cursor: pointer;
+  }
   &__placeholder {
     color: rgba(175, 231, 85, 0.4);
     font-weight: 500;
+    font-style: italic;
     font-size: 1rem;
     text-align: center;
     margin-top: 20px;
   }
-  &__table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    table, th, td {
-      border: 1px solid #ddd;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-  }
+}
+
+.delete-button {
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
 }
