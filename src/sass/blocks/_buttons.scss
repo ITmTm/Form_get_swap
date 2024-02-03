@@ -1,0 +1,45 @@
+.main {
+  &__button {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+  }
+  button {
+    padding: 10px 15px;
+    cursor: pointer;
+    background: #46424247;
+    border: 1px solid gold;
+    color: #89bb27;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: .6s all ease;
+    box-shadow: 2px 2px 4px gray;
+    &:hover {
+      color: #d6e8b4;
+      background: rgba(129, 88, 88, 0.28);
+      transition: .6s all ease;
+      transform: scale(0.9);
+    }
+  }
+
+}
+
+.delete-button {
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+
+#pagination {
+  margin-top: 20px;
+  display: flex;
+  column-gap: 15px;
+  button {
+    padding: 5px 10px;
+  }
+}
+
