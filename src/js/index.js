@@ -5,8 +5,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		  loader = document.querySelector('#loader'),
 		  apiUrl = 'https://swapi.dev/api/people/';
 
+	const message = {
+		failure: 'icon/404.gif'
+	}
+
 	let sortDirection = 1;
 	let currentSortColumn = null;
+
+	let currentPage = 1;	// Текущая страница
 
 	/**
 	 * @param {Object} data
@@ -23,11 +29,17 @@ window.addEventListener('DOMContentLoaded', () => {
 		setupDeleteButtons();
 	}
 
+	if (localStorage.getItem('currentPage')) {
+		currentPage = parseInt(localStorage.getItem('currentPage'))
+	}
+
 	function fetchData() {
 		// Показ прелоадера
 		showLoader();
 
-		fetch(apiUrl)
+		const pageUrl = `${apiUrl}?page=${currentPage}`;		// Формированеие URL страницы
+
+		fetch(pageUrl)
 			.then(response => response.json())
 			.then(/** @param {Object} data */ data => {
 
@@ -39,6 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					renderTable(results);
 					setupSortListener();  // Обработчик событий для сортировки после загрузки данных
 					setupDeleteButtons(); // Обработчик событий для кнопки удаления
+					renderPagination(data) // Обновление элемента пагинации
 					// Сохранение данных в localStorage
 					localStorage.setItem('tableData', JSON.stringify(results));
 				} else {
@@ -49,7 +62,8 @@ window.addEventListener('DOMContentLoaded', () => {
 				console.error('Ошибка при получений данных: ', err);
 				// Скрываем прелоадер в случае ошибки
 				hideLoader();
-				showPlaceholder(`Ошибка при получений данных: ${err}`)
+				renderPagination([]);
+				showPlaceholder(`<img src="${message.failure}" style="display: block;margin: 0 auto;" alt="Error icon"> ${err}`)
 			});
 	}
 
@@ -78,6 +92,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 				addDeleteButton(row, i);  // Удаление каждой строки
 			}
+
+			// Обновление элементов пагинации
+			renderPagination(data);
 		} else {
 			showPlaceholder('Данные не найдены');
 		}
@@ -85,6 +102,9 @@ window.addEventListener('DOMContentLoaded', () => {
 		// Очищаем контейнер и добавляем таблицу
 		tableContainer.innerHTML = '';
 		tableContainer.appendChild(table);
+
+		// Обновление элементов пагинации
+		renderPagination(data);
 	}
 
 
@@ -176,11 +196,42 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
+	function renderPagination(data) {
+		const paginationContainer =  document.querySelector('#pagination');
+		paginationContainer.innerHTML = '';
+
+		const itemsPerPage = null;
+
+		// Проверка есть ли данные в localStorage
+		const storedData = JSON.parse(localStorage.getItem('tableData')) || [];
+		const totalCount = (data && data.count) || storedData.length;
+
+		if (totalCount > 0) {
+			// Если есть то используем их
+			const totalPages = Math.ceil(totalCount / itemsPerPage);
+			const maxButtons = 5;
+
+			for (let i = 1; i <= Math.min(totalPages, maxButtons); i++) {
+				const pageButton = document.createElement('button');
+				pageButton.textContent = String(i); // Преобразование число в строку
+				pageButton.addEventListener('click', (e) => {
+					currentPage = parseInt(e.target.textContent); // Преобразование числа в число
+					fetchData();
+				});
+				paginationContainer.appendChild(pageButton);
+			}
+		}
+	}
+
 	function clearTable() {
 		tableContainer.innerHTML = '<p>Данные еще не загруженны</p>';
 
 		// Очищение данных в localStorage при очистке таблицы
 		localStorage.removeItem('tableData');
+		localStorage.removeItem('currentPage');  // Очистка сохраненной текущей страницы
+
+		// Очищение пагинации при чистке таблицы
+		renderPagination([]);
 	}
 
 	function showPlaceholder(message) {
