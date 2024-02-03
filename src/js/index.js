@@ -76,7 +76,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					cell.textContent = key ? data[i][key] : '';
 				}
 
-				addDeleteButton(row);  // Удаление каждой строки
+				addDeleteButton(row, i);  // Удаление каждой строки
 			}
 		} else {
 			showPlaceholder('Данные не найдены');
@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		const deleteButtons = tableContainer.querySelectorAll('.delete-button');
 		deleteButtons.forEach((button) => {
 			button.addEventListener('click', () => {
-				deleteRow(0);
+				deleteRow(1);
 			});
 		});
 	}
