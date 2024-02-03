@@ -224,14 +224,21 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	function clearTable() {
-		tableContainer.innerHTML = '<p>Данные еще не загруженны</p>';
+		tableContainer.classList.add('fade-out');
 
-		// Очищение данных в localStorage при очистке таблицы
-		localStorage.removeItem('tableData');
-		localStorage.removeItem('currentPage');  // Очистка сохраненной текущей страницы
 
-		// Очищение пагинации при чистке таблицы
-		renderPagination([]);
+		setTimeout(() => {
+			tableContainer.innerHTML = '<p>Данные еще не загружены</p>';
+
+			// Очищение данных в localStorage при очистке таблицы
+			localStorage.removeItem('tableData');
+			localStorage.removeItem('currentPage');  // Очистка сохраненной текущей страницы
+
+			// Очищение пагинации при чистке таблицы
+			renderPagination([]);
+
+			tableContainer.classList.remove('fade-out');
+		}, 500)
 	}
 
 	function showPlaceholder(message) {
