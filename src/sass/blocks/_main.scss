@@ -1,4 +1,5 @@
 .main {
+  position: relative;
   padding-top: 20px;
   &__button {
     text-align: center;
@@ -78,4 +79,13 @@
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+#pagination {
+  margin-top: 20px;
+  display: flex;
+  column-gap: 15px;
+  button {
+    padding: 5px 10px;
+  }
 }
