@@ -1,29 +1,6 @@
 .main {
   position: relative;
   padding-top: 20px;
-  &__button {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    column-gap: 30px;
-  }
-  button {
-    padding: 10px 15px;
-    cursor: pointer;
-    background: #46424247;
-    border: 1px solid gold;
-    color: #89bb27;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: .6s all ease;
-    box-shadow: 2px 2px 4px gray;
-    &:hover {
-      color: #d6e8b4;
-      background: rgba(129, 88, 88, 0.28);
-      transition: .6s all ease;
-      transform: scale(0.9);
-    }
-  }
   table, th, td {
     border: 1px solid #62f110;
   }
@@ -38,15 +15,6 @@
     position: sticky;
     top: 0;
   }
-  thead {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    position: sticky;
-    top: 0;
-    background-color: #fff; /* Задайте цвет фона по вашему выбору */
-    z-index: 1; /* Убеждаемся, что шапка остается выше контента при прокрутке */
-  }
   td{
     color: aqua;
   }
@@ -59,8 +27,22 @@
     font-weight: 500;
     text-align: left;
     background-color: rgba(230, 221, 238, 0.2);
-
   }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  #tableContainer.fade-out {
+    animation: fadeOut 0.5s ease-in-out;
+  }
+
+
   &__placeholder {
     color: rgba(175, 231, 85, 0.4);
     font-weight: 500;
@@ -71,21 +53,8 @@
     overflow-y: auto;
     margin-top: 30px;
   }
+
+
 }
 
-.delete-button {
-  background-color: #ff6347;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
 
-#pagination {
-  margin-top: 20px;
-  display: flex;
-  column-gap: 15px;
-  button {
-    padding: 5px 10px;
-  }
-}
