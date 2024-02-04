@@ -29,11 +29,23 @@
 <h2 align="left"> Дополнительные пункты (уровень 3):</h2>
 <h3> · Реализовать пагинацию. Для удобства можно выводить больше данных. Важно, чтобы пагинация осуществлялась в рамках одной страницы (без изменения URL’a).</h3>
 
-<br>
-<br>
-<br>
-<br>
-![Screenshot_1](https://github.com/ITmTm/Test_swap_utip/assets/98873757/5fb09454-17bb-4bc5-bbc1-c8ff74da0879)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+![Screenshot_2](https://github.com/ITmTm/Test_swap_utip/assets/98873757/fbd5e003-962e-47a1-af29-c27c418fa9ec)
 
 
 
