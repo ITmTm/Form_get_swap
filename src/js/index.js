@@ -1,60 +1,9 @@
-window.addEventListener('DOMContentLoaded', function() {
+'use strict'
+document.addEventListener('DOMContentLoaded', () => {
 	const fetchDataBtn = document.querySelector('#fetchData'),
-		  clearTableBtn = document.querySelector('#clearTable'),
-		  tableContainer = document.querySelector('#tableContainer'),
-		  loader = document.querySelector('#loader');
-
-	let data = [];
-
-
-	function makeRowsDraggable() {
-		const rows = document.querySelectorAll('table tr');
-		rows.forEach(row => {
-			row.draggable = true;
-
-			row.addEventListener('dragstart', handleDragStart);
-			row.addEventListener('dragover', handleDragOver);
-			row.addEventListener('drop', handleDrop);
-			row.addEventListener('dragend', handleDragEnd);
-		});
-	}
-
-	let draggendRow = null;
-
-	function handleDragStart(e) {
-		draggendRow = e.target;
-		e.dataTransfer.effectAllowed = 'move';
-		e.dataTransfer.setData('text/html', draggendRow.innerHTML);
-	}
-
-	function handleDragOver(e) {
-		e.preventDefault();
-		e.dataTransfer.dropEffect = 'move';
-	}
-
-	function handleDrop(e) {
-		e.preventDefault();
-		const overRow = e.target.closest('tr');
-		const table = document.querySelector('table');
-
-		if (overRow && draggendRow) {
-			if (overRow !== draggendRow) {
-				const parent = overRow.parentNode;
-
-				if (draggendRow.rowIndex < overRow.rowIndex) {
-					parent.insertBefore(draggendRow, overRow.nextSibling);
-				} else {
-					parent.insertBefore(draggendRow, overRow);
-				}
-
-				makeRowsDraggable();  // Добавление прослушивателей событий
-
-				// const updateData
-			}
-		}
-	}
-
-
+		clearTableBtn = document.querySelector('#clearTable'),
+		tableContainer = document.querySelector('#tableContainer'),
+		loader = document.querySelector('#loader');
 
 	const message = {
 		failure: 'icon/404.gif'
@@ -99,6 +48,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			const response = await fetch(pageUrl)
 
 			handleResponse(response);
+
 		} catch (err) {
 			handleError(err);
 		} finally {
@@ -123,8 +73,8 @@ window.addEventListener('DOMContentLoaded', function() {
 					setupDeleteButtons(); // Обработчик событий для кнопки удаления
 					renderPagination(data) // Обновление элемента пагинации
 
-					// 			// Сохранение данных в localStorage
-								localStorage.setItem('tableData', JSON.stringify(results));
+					//// Сохранение данных в localStorage
+					localStorage.setItem('tableData', JSON.stringify(results));
 				} else {
 					showPlaceholder('Данные не найдены');
 				}
@@ -301,7 +251,6 @@ window.addEventListener('DOMContentLoaded', function() {
 						.catch((err) => {
 							console.error('Ошибка при загрузке данных:', err);
 						});
-					// activePageButton(pageButton)
 				});
 				paginationContainer.appendChild(pageButton);
 
