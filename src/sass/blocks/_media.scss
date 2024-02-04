@@ -1,6 +1,15 @@
 @media (max-width: 1200px) {
+
     .container {
         max-width: 960px;
+    }
+
+    body {
+        background: url(../image/starwars.jpg) center no-repeat;
+    }
+
+    .logo img {
+        width: 80%;
     }
 }
 
@@ -8,11 +17,24 @@
     .container {
         max-width: 720px;
     }
+
+    body {
+        background-attachment: fixed;
+    }
+
+    .logo {
+        margin: 20px 0 0 10px;
+    }
 }
 
 @media (max-width: 768px) {
     .container {
         max-width: 540px;
+    }
+
+    .logo {
+        width: 230px;
+        height: 110px;
     }
 }
 
@@ -20,5 +42,23 @@
     .container {
         width: 100%;
         padding: 0 10px;
+    }
+
+    .logo {
+        width: 290px;
+        height: 160px;
+        img {
+            width: 100%;
+        }
+    }
+
+    .main {
+        button {
+            padding: 10px 7px;
+        }
+    }
+
+    #loader {
+        top: 100%;
     }
 }
