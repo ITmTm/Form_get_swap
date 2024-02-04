@@ -28,11 +28,6 @@
     background-color: rgba(13, 14, 13, 0.9);  // Фон головной строки
   }
 
-  tr[draggable="true"] {
-    cursor: move;
-    background-color: rgba(245, 245, 245, 0.17); /* Highlight background color */
-  }
-
   td {
     font-size: 1rem;
     color: aqua;
