@@ -8,6 +8,7 @@
   button {
     padding: 10px 15px;
     cursor: pointer;
+    border-radius: 5px;
     background: #46424247;
     border: 1px solid gold;
     color: #89bb27;
@@ -40,6 +41,11 @@
   column-gap: 15px;
   button {
     padding: 5px 10px;
+  }
+
+  .active-page {
+    background-color: rgba(74, 147, 14, 0.85);
+    color: #fff;
   }
 }
 
