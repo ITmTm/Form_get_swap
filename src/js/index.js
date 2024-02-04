@@ -1,9 +1,60 @@
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', function() {
 	const fetchDataBtn = document.querySelector('#fetchData'),
 		  clearTableBtn = document.querySelector('#clearTable'),
 		  tableContainer = document.querySelector('#tableContainer'),
-		  loader = document.querySelector('#loader'),
-		  apiUrl = 'https://swapi.dev/api/people/';
+		  loader = document.querySelector('#loader');
+
+	let data = [];
+
+
+	function makeRowsDraggable() {
+		const rows = document.querySelectorAll('table tr');
+		rows.forEach(row => {
+			row.draggable = true;
+
+			row.addEventListener('dragstart', handleDragStart);
+			row.addEventListener('dragover', handleDragOver);
+			row.addEventListener('drop', handleDrop);
+			row.addEventListener('dragend', handleDragEnd);
+		});
+	}
+
+	let draggendRow = null;
+
+	function handleDragStart(e) {
+		draggendRow = e.target;
+		e.dataTransfer.effectAllowed = 'move';
+		e.dataTransfer.setData('text/html', draggendRow.innerHTML);
+	}
+
+	function handleDragOver(e) {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = 'move';
+	}
+
+	function handleDrop(e) {
+		e.preventDefault();
+		const overRow = e.target.closest('tr');
+		const table = document.querySelector('table');
+
+		if (overRow && draggendRow) {
+			if (overRow !== draggendRow) {
+				const parent = overRow.parentNode;
+
+				if (draggendRow.rowIndex < overRow.rowIndex) {
+					parent.insertBefore(draggendRow, overRow.nextSibling);
+				} else {
+					parent.insertBefore(draggendRow, overRow);
+				}
+
+				makeRowsDraggable();  // Добавление прослушивателей событий
+
+				// const updateData
+			}
+		}
+	}
+
+
 
 	const message = {
 		failure: 'icon/404.gif'
@@ -12,7 +63,11 @@ window.addEventListener('DOMContentLoaded', () => {
 	let sortDirection = 1;
 	let currentSortColumn = null;
 
-	let currentPage = 1;	// Текущая страница
+
+	let currentPageButton = null; // Активная кнопка
+	const savedActivePage = localStorage.getItem('activePage');
+	// Текущая страница
+	let currentPage = savedActivePage ? parseInt(savedActivePage) : 1;
 
 	/**
 	 * @param {Object} data
@@ -33,40 +88,60 @@ window.addEventListener('DOMContentLoaded', () => {
 		currentPage = parseInt(localStorage.getItem('currentPage'))
 	}
 
-	function fetchData() {
-		// Показ прелоадера
-		showLoader();
+	async function fetchData() {
+		try {
+			// Показ прелоадера
+			showLoader();
 
-		const pageUrl = `${apiUrl}?page=${currentPage}`;		// Формированеие URL страницы
+			const apiUrl = 'https://swapi.dev/api/people/';
+			const pageUrl = `${apiUrl}?page=${currentPage}`;		// Формированеие URL страницы
 
-		fetch(pageUrl)
-			.then(response => response.json())
-			.then(/** @param {Object} data */ data => {
+			const response = await fetch(pageUrl)
 
-				// Скрытие преолоадера после загрузки данных
-				hideLoader();
+			handleResponse(response);
+		} catch (err) {
+			handleError(err);
+		} finally {
+			// Скрываем прелоадер в случае ошибки
+			hideLoader();
+		}
+	}
 
+
+	function handleResponse(response) {
+		if (!response.ok) {
+			throw new Error('Ошибка при получений данных');
+		}
+
+		return response.json()
+			.then(data => {
 				const results = data && data.results;  // Явно указываем структуру объекта
+
 				if (results) {
 					renderTable(results);
 					setupSortListener();  // Обработчик событий для сортировки после загрузки данных
 					setupDeleteButtons(); // Обработчик событий для кнопки удаления
 					renderPagination(data) // Обновление элемента пагинации
-					// Сохранение данных в localStorage
-					localStorage.setItem('tableData', JSON.stringify(results));
+
+					// 			// Сохранение данных в localStorage
+								localStorage.setItem('tableData', JSON.stringify(results));
 				} else {
 					showPlaceholder('Данные не найдены');
 				}
-			})
-			.catch(err => {
-				console.error('Ошибка при получений данных: ', err);
-				// Скрываем прелоадер в случае ошибки
-				hideLoader();
-				renderPagination([]);
-				showPlaceholder(`<img src="${message.failure}" style="display: block;margin: 0 auto;" alt="Error icon"> ${err}`)
 			});
 	}
 
+	function handleError(err) {
+		console.error('Ошибка при получений данных: ', err);
+
+		// Скрытие преолоадера после загрузки данных
+		hideLoader();
+
+		renderPagination([]);
+		showPlaceholder(`<img src="${message.failure}" style="display: block;margin: 0 auto;" alt="Error icon"> ${err}`);
+	}
+
+	// Создание таблицы
 	function renderTable(data) {
 		const table = document.createElement('table');
 
@@ -91,6 +166,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				}
 
 				addDeleteButton(row, i);  // Удаление каждой строки
+
 			}
 
 			// Обновление элементов пагинации
@@ -102,6 +178,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		// Очищаем контейнер и добавляем таблицу
 		tableContainer.innerHTML = '';
 		tableContainer.appendChild(table);
+
+		setupSortListener();
 
 		// Обновление элементов пагинации
 		renderPagination(data);
@@ -214,13 +292,37 @@ window.addEventListener('DOMContentLoaded', () => {
 			for (let i = 1; i <= Math.min(totalPages, maxButtons); i++) {
 				const pageButton = document.createElement('button');
 				pageButton.textContent = String(i); // Преобразование число в строку
-				pageButton.addEventListener('click', (e) => {
+				pageButton.addEventListener('click',(e) => {
 					currentPage = parseInt(e.target.textContent); // Преобразование числа в число
-					fetchData();
+					fetchData()
+						.then(() => {
+							activePageButton(pageButton);
+						})
+						.catch((err) => {
+							console.error('Ошибка при загрузке данных:', err);
+						});
+					// activePageButton(pageButton)
 				});
 				paginationContainer.appendChild(pageButton);
+
+				// Проверка, является ли текущая кнопка активной
+				if (i === currentPage) {
+					currentPageButton = pageButton;
+					currentPageButton.classList.add('active-page');  // Добавление класса
+				}
 			}
 		}
+	}
+
+	function activePageButton(activeButton) {
+		if (currentPageButton) {
+			currentPageButton.classList.remove('active-page');
+		}
+		currentPageButton = activeButton;
+		currentPageButton.classList.add('active-page');
+
+		// Сохраняем текущую активную страницу в localStorage
+		localStorage.setItem('activePage', currentPage);
 	}
 
 	function clearTable() {
@@ -228,7 +330,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 		setTimeout(() => {
-			tableContainer.innerHTML = '<p>Данные еще не загружены</p>';
+			tableContainer.innerHTML = '<p>Данные не загружены...</p>';
 
 			// Очищение данных в localStorage при очистке таблицы
 			localStorage.removeItem('tableData');
